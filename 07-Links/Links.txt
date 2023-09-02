@@ -1,0 +1,47 @@
+# Server
+  01 - Setting up OpenLDAP & SSSD w/Sudo on Ubuntu 22.04
+    https://www.labsrc.com/setting-up-openldap-sssd-w-sudo-on-ubuntu-22-04/
+
+  02 - Install OpenLDAP and phpLDAPadmin on Ubuntu 22.04|20.04|18.04
+    https://computingforgeeks.com/install-and-configure-openldap-phpldapadmin-on-ubuntu/
+
+  03 - Install and Setup OpenLDAP on CentOS 8
+    https://kifarunix.com/install-and-setup-openldap-on-centos-8/
+
+  04 - Installing & Configuring OpenLDAP
+    https://www.brianshowalter.com/blog/installing-configuring-openldap
+
+  05 - LDAP server
+    http://www.daxiongmao.eu/wiki/index.php?title=LDAP_server
+
+  06 - How to Create OpenLDAP Member Groups
+    https://kifarunix.com/how-to-create-openldap-member-groups/
+
+  07 - Implement OpenLDAP Password Policies
+    https://kifarunix.com/implement-openldap-password-policies/
+
+  08 - How to Enable OpenLDAP Audit Logging
+    https://kifarunix.com/how-to-enable-openldap-audit-logging/
+
+  09 - Secure OpenLDAP Server with SSL/TLS on Ubuntu 22.04|20.04|18.04
+    https://computingforgeeks.com/secure-ldap-server-with-ssl-tls-on-ubuntu/?expand_article=1&expand_article=1
+
+# Web Gui
+  01 - Install LDAP Account Manager on Ubuntu 22.04|20.04|18.04|16.04
+    https://computingforgeeks.com/install-and-configure-ldap-account-manager-on-ubuntu/?expand_article=1
+
+  02 - Configure SSL/TLS setting to use secure encrypt HTTPS connection.
+    https://www.server-world.info/en/note?os=Ubuntu_22.04&p=httpd&f=3
+
+# Client
+  01 - Configure LDAP Client on Ubuntu 22.04|20.04|18.04|16.04
+    https://computingforgeeks.com/how-to-configure-ubuntu-as-ldap-client/
+
+  02 - SSH server ldap user
+    http://www.daxiongmao.eu/wiki/index.php?title=SSH_server_ldap_user
+
+  03 - Configure SSSD for LDAP Authentication on Ubuntu 22.04
+    https://kifarunix.com/configure-sssd-for-ldap-authentication-on-ubuntu-22-04/
+
+  04 - Configurar o cliente LDAP usando o SSSD para autenticação no Linux
+    http://www.dicas-l.com.br/arquivo/configurar_o_cliente_ldap_usando_o_sssd_para_autenticacao_no_linux.php
