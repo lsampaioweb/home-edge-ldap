@@ -99,6 +99,8 @@
   sudo ufw allow proto tcp from any to any port ldaps comment "OpenLDAP"
 
 11 - Change the initial password for all the users.
+  * This is necessary because all users were imported without a password.
+
   # List all users.
   ldapsearch -x -D cn=admin,dc=homelab -W -b "dc=homelab" "(objectclass=organizationalRole)" dn | awk -F": " '$1~/^\s*dn/{print $2}' > readers.txt
   ldapsearch -x -D cn=admin,dc=homelab -W -b "dc=homelab" "(objectclass=organizationalPerson)" dn | awk -F": " '$1~/^\s*dn/{print $2}' > users.txt
@@ -108,10 +110,10 @@
   ./change-password.sh users.txt $password
   
 12 - Test if the data was inserted.
+  ldapsearch -x -D "cn=admin,dc=homelab" -W
   ldapsearch -x -D "cn=admin,dc=homelab" -W -b "dc=homelab"
-  ldapsearch -x -D "cn=admin,dc=homelab" -W -H ldap://edge-ldap-01.homelab -b "dc=homelab"
   ldapsearch -x -D "cn=admin,dc=homelab" -W -H ldap://edge-ldap-01.homelab -b "dc=homelab"
   ldapsearch -H ldapi:/// -Y EXTERNAL -LLL -b "dc=homelab"
 
   ldapsearch -x -D "cn=ldap-reader-firewall,dc=homelab" -W -b "dc=homelab"
-  ldapsearch -x -D "cn=lsampaio-grafana-manager,ou=people,dc=homelab" -W -b "dc=homelab"
+  ldapsearch -x -D "cn=lsampaio-postgresql-team,ou=people,dc=homelab" -W -b "dc=homelab"

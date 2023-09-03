@@ -43,7 +43,7 @@
   sudo systemctl restart apache2
 
 07 - Configure LDAP Account Manager (CLI)
-  sudo cp ldap/server-web/site/config.cfg /etc/ldap-account-manager/config.cfg &&
+  sudo cp ldap/server-web/site/config.cfg /etc/ldap-account-manager/ &&
   sudo chmod 600 /etc/ldap-account-manager/config.cfg &&
   sudo chown www-data:root /etc/ldap-account-manager/config.cfg
 
