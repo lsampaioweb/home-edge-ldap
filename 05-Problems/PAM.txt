@@ -1,0 +1,16 @@
+edge-ldap-01 systemd[1]: Starting SSSD PAM Service responder private socket...
+edge-ldap-01 systemd[1]: Starting SSSD PAM Service responder socket...
+edge-ldap-01 sssd_check_socket_activated_responders[1508]: [sssd] [main] (0x0070): Misconfiguration found for the pam responder.
+edge-ldap-01 sssd_check_socket_activated_responders[1508]: The pam responder has been configured to be socket-activated but it's still mentioned in the services' line in /etc/sssd/sssd.conf.
+edge-ldap-01 sssd_check_socket_activated_responders[1508]: Please, consider either adjusting your services' line in /etc/sssd/sssd.conf or disabling the pam's socket by calling:
+edge-ldap-01 systemd[1]: Starting SSSD Sudo Service responder...
+edge-ldap-01 sssd_check_socket_activated_responders[1508]: "systemctl disable sssd-pam.socket"
+edge-ldap-01 sssd_check_socket_activated_responders[1509]: "systemctl disable sssd-pam.socket"
+edge-ldap-01 systemd[1]: sssd-pam-priv.socket: Control process exited, code=exited, status=17/n/a
+edge-ldap-01 systemd[1]: sssd-pam-priv.socket: Failed with result 'exit-code'.
+edge-ldap-01 systemd[1]: Failed to listen on SSSD PAM Service responder private socket.
+edge-ldap-01 systemd[1]: Dependency failed for SSSD PAM Service responder socket.
+edge-ldap-01 systemd[1]: sssd-pam.socket: Job sssd-pam.socket/start failed with result 'dependency'.
+edge-ldap-01 systemd[1]: sssd-pam.socket: Control process exited, code=exited, status=17/n/a
+edge-ldap-01 systemd[1]: sssd-pam.socket: Failed with result 'exit-code'.
+edge-ldap-01 systemd[1]: Closed SSSD PAM Service responder socket.

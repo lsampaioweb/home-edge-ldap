@@ -1,0 +1,62 @@
+01 - Copy all the necessary files to the server.
+  mkdir -p ~/ldap/client/
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-ldap-01.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-postgresql-01.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-zabbix-01.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-grafana-01.homelab:~/ldap/client/
+
+02 - Install SSSD
+  sudo apt install -y sssd libpam-sss libnss-sss libsss-sudo sssd-ldap sssd-tools ldap-utils
+
+03 - Fix the apparmor permissions.
+  sudo apt install -y apparmor-utils
+
+  sudo cp ldap/client/sssd/usr.sbin.sssd /etc/apparmor.d/usr.sbin.sssd &&
+  sudo chown root:root /etc/apparmor.d/usr.sbin.sssd &&
+  sudo apparmor_parser -r -T /etc/apparmor.d/usr.sbin.sssd &&
+  sudo aa-enforce /usr/sbin/sssd &&
+  sudo /etc/init.d/apparmor restart &&
+  sudo systemctl restart sssd.service &&
+  sudo cat /var/log/syslog | grep DENIED
+
+04 - Install OpenLDAP Server CA Certificate
+  Verify the validity of the certificate:
+    openssl s_client -connect edge-ldap-01.homelab:636 -CAfile /usr/local/share/ca-certificates/certificate.authority.crt
+
+  Configure LDAP client to ensure connection between client and server is encrypted.
+    sudo cp ldap/client/config/ldap.conf /etc/ldap/ldap.conf
+
+05 - Set Proper Permissions and Ownership on SSSD configurations
+  sudo cp ldap/client/sssd/sssd.conf /etc/sssd/sssd.conf &&
+  sudo rm /usr/lib/x86_64-linux-gnu/sssd/conf/sssd.conf &&
+  sudo ln -s /etc/sssd/sssd.conf /usr/lib/x86_64-linux-gnu/sssd/conf/sssd.conf &&
+  sudo chmod 600 -R /etc/sssd &&
+  sudo chown -R root: /etc/sssd
+
+  Check if everything is correct:
+  sudo sssctl config-check
+
+06 - Enable sudoers
+  sudo nano /etc/nsswitch.conf
+  sudoers:        files sss
+
+07 - Configure Auto-Home Directory Creation
+  sudo nano /etc/pam.d/common-session
+
+  Add the line;
+    session required        pam_mkhomedir.so skel=/etc/skel/ umask=0022
+  Just below the line;
+    session required                        pam_unix.so
+
+08 - Restart SSSD service
+  sudo systemctl restart sssd &&
+  sudo systemctl status sssd
+
+09 - Test SSSD Authentication as a Group Member
+  sudo sssctl cache-expire -E &&
+  sudo sssctl cache-remove &&
+  sudo systemctl stop sssd &&
+  sudo rm -rf /var/lib/sss/db/* &&
+  sudo systemctl start sssd
+
+  sudo login

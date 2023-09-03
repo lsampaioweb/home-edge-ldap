@@ -100,15 +100,18 @@
 
 11 - Change the initial password for all the users.
   # List all users.
-  ldapsearch -x -D cn=admin,dc=homelab -W -b "dc=homelab" "(|(objectclass=organizationalRole)(objectclass=organizationalPerson))" dn | awk -F": " '$1~/^\s*dn/{print $2}' > users.txt
+  ldapsearch -x -D cn=admin,dc=homelab -W -b "dc=homelab" "(objectclass=organizationalRole)" dn | awk -F": " '$1~/^\s*dn/{print $2}' > readers.txt
+  ldapsearch -x -D cn=admin,dc=homelab -W -b "dc=homelab" "(objectclass=organizationalPerson)" dn | awk -F": " '$1~/^\s*dn/{print $2}' > users.txt
 
   password=$(openssl rand -base64 30 | colrm 30 | tr -dc 'a-zA-Z0-9')
+  ./change-password.sh readers.txt $password
   ./change-password.sh users.txt $password
-
+  
 12 - Test if the data was inserted.
-  ldapsearch -x -D cn=admin,dc=homelab -W -b "dc=homelab"
-  ldapsearch -x -D cn=admin,dc=homelab -W -H ldap://edge-ldap-01.homelab -b "dc=homelab"
+  ldapsearch -x -D "cn=admin,dc=homelab" -W -b "dc=homelab"
+  ldapsearch -x -D "cn=admin,dc=homelab" -W -H ldap://edge-ldap-01.homelab -b "dc=homelab"
+  ldapsearch -x -D "cn=admin,dc=homelab" -W -H ldap://edge-ldap-01.homelab -b "dc=homelab"
   ldapsearch -H ldapi:/// -Y EXTERNAL -LLL -b "dc=homelab"
 
-  ldapsearch -x -D cn=ldap-reader-firewall,dc=homelab -W -b "dc=homelab"
-  ldapsearch -x -D cn=lsampaio-grafana-manager,ou=people,dc=homelab -W -b "dc=homelab"
+  ldapsearch -x -D "cn=ldap-reader-firewall,dc=homelab" -W -b "dc=homelab"
+  ldapsearch -x -D "cn=lsampaio-grafana-manager,ou=people,dc=homelab" -W -b "dc=homelab"

@@ -1,0 +1,5 @@
+edge-zabbix-01 chown[1649]: /bin/chown: cannot access '/var/log/sssd/sssd_sudo.log': No such file or directory
+
+Solution:
+  sudo touch /var/log/sssd/sssd_sudo.log &&
+  sudo chmod 600 /var/log/sssd/sssd_sudo.log
