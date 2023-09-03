@@ -1,0 +1,12 @@
+sudo apt remove -y --purge slapd ldap-utils apache2 php php-cgi libapache2-mod-php php-mbstring php-common php-pear ldap-account-manager &&
+sudo apt autoremove -y &&
+sudo rm -rf /etc/ldap/ && 
+sudo rm -rf /etc/default/slapd &&
+sudo rm -rf /etc/apache2/ &&
+sudo rm -rf /var/lib/ldap/ &&
+sudo rm -rf /var/backups/ &&
+sudo rm -rf /var/log/slapd/ &&
+sudo rm /etc/logrotate.d/slapd-audit
+
+sudo apt remove --purge -y sssd libpam-sss libnss-sss libsss-sudo sssd-ldap sssd-tools ldap-utils
+sudo apt autoremove -y

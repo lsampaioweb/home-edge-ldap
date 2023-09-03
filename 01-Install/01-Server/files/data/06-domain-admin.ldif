@@ -1,0 +1,72 @@
+dn: cn=lsampaio-server-team,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10000
+cn: lsampaio-server-team
+uid: lsampaio-server-team
+givenname: Luciano
+sn: Sampaio Server Team
+displayname: Luciano Sampaio Server Team
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-server-team
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=lsampaio-server-manager,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10001
+cn: lsampaio-server-manager
+uid: lsampaio-server-manager
+givenname: Luciano
+sn: Sampaio Server Manager
+displayname: Luciano Sampaio Server Manager
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-server-manager
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=server-team,ou=groups,dc=homelab
+cn: server-team
+description: Server Team
+objectclass: groupOfNames
+member: cn=lsampaio-server-team,ou=people,dc=homelab
+
+dn: cn=server-manager,ou=groups,dc=homelab
+cn: server-manager
+description: Server Manager
+objectclass: groupOfNames
+member: cn=lsampaio-server-manager,ou=people,dc=homelab
+
+dn: cn=server-logins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: server-logins
+description: Users that can login in the Server server
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-manager,ou=groups,dc=homelab)
+
+dn: cn=server-admins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: server-admins
+description: Users that are Server Administrators
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-manager,ou=groups,dc=homelab)
+
+dn: cn=server-admins,ou=sudoers,dc=homelab
+objectClass: sudoRole
+objectClass: top
+cn: server-admins
+description: Users that can become root
+sudoHost: ALL
+sudoCommand: ALL
+sudoRunAsUser: ALL
+sudoRunAsGroup: ALL
+sudoUser: lsampaio-server-team
+sudoUser: lsampaio-server-manager
+sudoOrder: 2

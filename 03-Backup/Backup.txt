@@ -1,0 +1,5 @@
+Export configuration
+  sudo slapcat -vF /etc/ldap/slapd.d -n 0 -l "config-$(date '+%Y-%m-%d-%H-%M-%S').ldif"
+
+Export database
+  sudo slapcat -v -n 1 -l "database-$(date '+%Y-%m-%d-%H-%M-%S').ldif"

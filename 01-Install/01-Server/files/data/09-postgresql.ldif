@@ -1,0 +1,74 @@
+dn: cn=lsampaio-postgresql-team,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10006
+cn: lsampaio-postgresql-team
+uid: lsampaio-postgresql-team
+givenname: Luciano
+sn: Sampaio Postgresql Team
+displayname: Luciano Sampaio Postgresql Team
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-postgresql-team
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=lsampaio-postgresql-manager,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10007
+cn: lsampaio-postgresql-manager
+uid: lsampaio-postgresql-manager
+givenname: Luciano
+sn: Sampaio Postgresql Manager
+displayname: Luciano Sampaio Postgresql Manager
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-postgresql-manager
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=postgresql-team,ou=groups,dc=homelab
+cn: postgresql-team
+description: Postgresql Team
+objectclass: groupOfNames
+member: cn=lsampaio-postgresql-team,ou=people,dc=homelab
+
+dn: cn=postgresql-manager,ou=groups,dc=homelab
+cn: postgresql-manager
+description: Postgresql Manager
+objectclass: groupOfNames
+member: cn=lsampaio-postgresql-manager,ou=people,dc=homelab
+
+dn: cn=postgresql-logins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: postgresql-logins
+description: Users that can login in the Postgresql server
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-manager,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=postgresql-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=postgresql-manager,ou=groups,dc=homelab)
+
+dn: cn=postgresql-admins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: postgresql-admins
+description: Users that are Postgresql Application Administrators
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=postgresql-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=postgresql-manager,ou=groups,dc=homelab)
+
+dn: cn=postgresql-admins,ou=sudoers,dc=homelab
+objectClass: sudoRole
+objectClass: top
+cn: postgresql-admins
+description: Users that can become root
+sudoHost: edge-postgresql-01
+sudoCommand: ALL
+sudoRunAsUser: ALL
+sudoRunAsGroup: ALL
+sudoUser: lsampaio-postgresql-team
+sudoUser: lsampaio-postgresql-manager
+sudoOrder: 5

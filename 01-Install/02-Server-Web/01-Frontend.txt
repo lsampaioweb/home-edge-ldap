@@ -1,0 +1,56 @@
+01 - Copy all the necessary files to the server.  
+  mkdir -p ~/ldap/server-web/
+  rsync -avh -e ssh 01-Install/02-Server-Web/files/ lsampaio@edge-ldap-01.homelab:~/ldap/server-web/
+
+02 - Install Apache Web server & PHP
+  Install packages.
+  sudo apt install -y apache2 php php-cgi libapache2-mod-php php-mbstring php-common php-pear
+
+  Enable php-cgi PHP extension.
+    sudo a2enconf php8.1-cgi &&
+    sudo systemctl reload apache2
+
+03 - Install LDAP Account Manager
+  Install packages.
+    sudo apt install -y ldap-account-manager
+
+  Restrict access to the web dashboard.
+    sudo nano /etc/apache2/conf-enabled/ldap-account-manager.conf
+    # Require all granted
+    Require ip 127.0.0.1 192.168.2.0/24
+
+  Restart apache web server.
+    sudo systemctl restart apache2
+
+  Active UFW firewall, open ports 80 and 443.
+    sudo ufw allow proto tcp from 192.168.2.0/24 to any port http comment "HTTP LDAP Account Manager" &&
+    sudo ufw allow proto tcp from 192.168.2.0/24 to any port https comment "HTTPS LDAP Account Manager"
+    or
+    sudo ufw allow proto tcp from any to any port http
+    sudo ufw allow proto tcp from any to any port https
+
+04 - Remove the default files.
+  sudo a2dissite 000-default
+  sudo rm /etc/apache2/sites-available/*
+
+05 - Copy the config file
+  sudo cp ldap/server-web/site/ldap-account-manager.conf /etc/apache2/sites-available/
+
+06 - Configuring Apache to Use TLS and redirect to HTTPS
+  sudo a2enmod ssl &&
+  sudo a2enmod rewrite &&
+  sudo a2ensite ldap-account-manager &&
+  sudo systemctl restart apache2
+
+07 - Configure LDAP Account Manager (CLI)
+  sudo cp ldap/server-web/site/config.cfg /etc/ldap-account-manager/config.cfg &&
+  sudo chmod 600 /etc/ldap-account-manager/config.cfg &&
+  sudo chown www-data:root /etc/ldap-account-manager/config.cfg
+
+  sudo cp ldap/server-web/site/lam.conf /var/lib/ldap-account-manager/config/ &&
+  sudo chmod 600 /var/lib/ldap-account-manager/config/lam.conf &&
+  sudo chown www-data:root /var/lib/ldap-account-manager/config/lam.conf
+
+  sudo systemctl restart apache2
+
+Access phpLDAPadmin: https://edge-ldap-01.homelab

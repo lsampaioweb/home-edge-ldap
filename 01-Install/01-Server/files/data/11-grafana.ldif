@@ -1,0 +1,74 @@
+dn: cn=lsampaio-grafana-team,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10010
+cn: lsampaio-grafana-team
+uid: lsampaio-grafana-team
+givenname: Luciano
+sn: Sampaio Grafana Team
+displayname: Luciano Sampaio Grafana Team
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-grafana-team
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=lsampaio-grafana-manager,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10011
+cn: lsampaio-grafana-manager
+uid: lsampaio-grafana-manager
+givenname: Luciano
+sn: Sampaio Grafana Manager
+displayname: Luciano Sampaio Grafana Manager
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-grafana-manager
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=grafana-team,ou=groups,dc=homelab
+cn: grafana-team
+description: Grafana Team
+objectclass: groupOfNames
+member: cn=lsampaio-grafana-team,ou=people,dc=homelab
+
+dn: cn=grafana-manager,ou=groups,dc=homelab
+cn: grafana-manager
+description: Grafana Manager
+objectclass: groupOfNames
+member: cn=lsampaio-grafana-manager,ou=people,dc=homelab
+
+dn: cn=grafana-logins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: grafana-logins
+description: Users that can login in the Grafana server
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-manager,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=grafana-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=grafana-manager,ou=groups,dc=homelab)
+
+dn: cn=grafana-admins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: grafana-admins
+description: Users that are Grafana Application Administrators
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=grafana-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=grafana-manager,ou=groups,dc=homelab)
+
+dn: cn=grafana-admins,ou=sudoers,dc=homelab
+objectClass: sudoRole
+objectClass: top
+cn: grafana-admins
+description: Users that can become root
+sudoHost: edge-grafana-01
+sudoCommand: ALL
+sudoRunAsUser: ALL
+sudoRunAsGroup: ALL
+sudoUser: lsampaio-grafana-team
+sudoUser: lsampaio-grafana-manager
+sudoOrder: 7

@@ -1,0 +1,16 @@
+dn: ou=people,dc=homelab
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=homelab
+objectClass: organizationalUnit
+ou: groups
+
+dn: ou=sudoers,dc=homelab
+objectClass: organizationalUnit
+objectClass: top
+ou: sudoers
+
+dn: ou=policies,dc=homelab
+objectClass: organizationalUnit
+ou: policies

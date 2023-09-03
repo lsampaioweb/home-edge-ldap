@@ -1,0 +1,74 @@
+dn: cn=lsampaio-zabbix-team,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10008
+cn: lsampaio-zabbix-team
+uid: lsampaio-zabbix-team
+givenname: Luciano
+sn: Sampaio Zabbix Team
+displayname: Luciano Sampaio Zabbix Team
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-zabbix-team
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=lsampaio-zabbix-manager,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10009
+cn: lsampaio-zabbix-manager
+uid: lsampaio-zabbix-manager
+givenname: Luciano
+sn: Sampaio Zabbix Manager
+displayname: Luciano Sampaio Zabbix Manager
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-zabbix-manager
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=zabbix-team,ou=groups,dc=homelab
+cn: zabbix-team
+description: Zabbix Team
+objectclass: groupOfNames
+member: cn=lsampaio-zabbix-team,ou=people,dc=homelab
+
+dn: cn=zabbix-manager,ou=groups,dc=homelab
+cn: zabbix-manager
+description: Zabbix Manager
+objectclass: groupOfNames
+member: cn=lsampaio-zabbix-manager,ou=people,dc=homelab
+
+dn: cn=zabbix-logins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: zabbix-logins
+description: Users that can login in the Zabbix server
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-manager,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=zabbix-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=zabbix-manager,ou=groups,dc=homelab)
+
+dn: cn=zabbix-admins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: zabbix-admins
+description: Users that are Zabbix Application Administrators
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=zabbix-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=zabbix-manager,ou=groups,dc=homelab)
+
+dn: cn=zabbix-admins,ou=sudoers,dc=homelab
+objectClass: sudoRole
+objectClass: top
+cn: zabbix-admins
+description: Users that can become root
+sudoHost: edge-zabbix-01
+sudoCommand: ALL
+sudoRunAsUser: ALL
+sudoRunAsGroup: ALL
+sudoUser: lsampaio-zabbix-team
+sudoUser: lsampaio-zabbix-manager
+sudoOrder: 6

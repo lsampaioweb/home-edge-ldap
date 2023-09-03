@@ -1,0 +1,74 @@
+dn: cn=lsampaio-ldap-team,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10004
+cn: lsampaio-ldap-team
+uid: lsampaio-ldap-team
+givenname: Luciano
+sn: Sampaio LDAP Team
+displayname: Luciano Sampaio LDAP Team
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-ldap-team
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=lsampaio-ldap-manager,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10005
+cn: lsampaio-ldap-manager
+uid: lsampaio-ldap-manager
+givenname: Luciano
+sn: Sampaio LDAP Manager
+displayname: Luciano Sampaio LDAP Manager
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-ldap-manager
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=ldap-team,ou=groups,dc=homelab
+cn: ldap-team
+description: LDAP Team
+objectclass: groupOfNames
+member: cn=lsampaio-ldap-team,ou=people,dc=homelab
+
+dn: cn=ldap-manager,ou=groups,dc=homelab
+cn: ldap-manager
+description: LDAP Manager
+objectclass: groupOfNames
+member: cn=lsampaio-ldap-manager,ou=people,dc=homelab
+
+dn: cn=ldap-logins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: ldap-logins
+description: Users that can login in the LDAP server
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-manager,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=ldap-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=ldap-manager,ou=groups,dc=homelab)
+
+dn: cn=ldap-admins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: ldap-admins
+description: Users that are LDAP Application Administrators
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=ldap-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=ldap-manager,ou=groups,dc=homelab)
+
+dn: cn=ldap-admins,ou=sudoers,dc=homelab
+objectClass: sudoRole
+objectClass: top
+cn: ldap-admins
+description: Users that can become root
+sudoHost: edge-ldap-01
+sudoCommand: ALL
+sudoRunAsUser: ALL
+sudoRunAsGroup: ALL
+sudoUser: lsampaio-ldap-team
+sudoUser: lsampaio-ldap-manager
+sudoOrder: 4

@@ -1,0 +1,74 @@
+dn: cn=lsampaio-network-team,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10002
+cn: lsampaio-network-team
+uid: lsampaio-network-team
+givenname: Luciano
+sn: Sampaio Network Team
+displayname: Luciano Sampaio Network Team
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-network-team
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=lsampaio-network-manager,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10003
+cn: lsampaio-network-manager
+uid: lsampaio-network-manager
+givenname: Luciano
+sn: Sampaio Network Manager
+displayname: Luciano Sampaio Network Manager
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-network-manager
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=network-team,ou=groups,dc=homelab
+cn: network-team
+description: Network Team
+objectclass: groupOfNames
+member: cn=lsampaio-network-team,ou=people,dc=homelab
+
+dn: cn=network-manager,ou=groups,dc=homelab
+cn: network-manager
+description: Network Manager
+objectclass: groupOfNames
+member: cn=lsampaio-network-manager,ou=people,dc=homelab
+
+dn: cn=network-logins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: network-logins
+description: Users that can login in the Network server
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-manager,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=network-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=network-manager,ou=groups,dc=homelab)
+
+dn: cn=network-admins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: network-admins
+description: Users that are Network Application Administrators
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=network-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=network-manager,ou=groups,dc=homelab)
+
+dn: cn=network-admins,ou=sudoers,dc=homelab
+objectClass: sudoRole
+objectClass: top
+cn: network-admins
+description: Users that can become root
+sudoHost: ALL
+sudoCommand: ALL
+sudoRunAsUser: ALL
+sudoRunAsGroup: ALL
+sudoUser: lsampaio-network-team
+sudoUser: lsampaio-network-manager
+sudoOrder: 3

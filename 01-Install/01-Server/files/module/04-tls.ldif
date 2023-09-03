@@ -1,0 +1,10 @@
+dn: cn=config
+changetype: modify
+add: olcTLSCACertificateFile
+olcTLSCACertificateFile: /etc/ldap/sasl2/certificate.authority.crt
+-
+add: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/ldap/sasl2/edge-ldap-01.homelab.crt
+-
+add: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/ldap/sasl2/edge-ldap-01.homelab.key

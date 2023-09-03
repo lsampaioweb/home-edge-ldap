@@ -1,0 +1,9 @@
+/var/log/slapd/slapd-audit.log {
+  weekly
+  missingok
+  notifempty
+  sharedscripts
+  rotate 2
+  compress
+  delaycompress
+}

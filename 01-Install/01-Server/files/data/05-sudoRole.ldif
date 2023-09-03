@@ -1,0 +1,7 @@
+dn: cn=defaults,ou=sudoers,dc=homelab
+objectClass: sudoRole
+objectClass: top
+cn: defaults
+description: Default sudoOption's go here
+sudoOption: env_keep+=SSH_AUTH_SOCK
+sudoOrder: 1

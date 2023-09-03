@@ -1,0 +1,114 @@
+01 - Copy all the necessary files to the server.
+  mkdir -p ~/ldap/server/
+  rsync -avh -e ssh 01-Install/01-Server/files/ lsampaio@edge-ldap-01.homelab:~/ldap/server/ &&
+  rsync -avh -e ssh /opt/certificates/certificate.authority/certificate.authority.crt lsampaio@edge-ldap-01.homelab:~/ldap/server/ssl/ &&
+  rsync -avh -e ssh /opt/certificates/edge-ldap-01.homelab/{*.crt,*.key} lsampaio@edge-ldap-01.homelab:~/ldap/server/ssl/
+
+02 - Install OpenLDAP on Ubuntu 22.04.
+  Change hostname.
+    * It is important to set the domain name.
+    sudo hostnamectl set-hostname edge-ldap-01.homelab
+
+    sudo nano /etc/hosts
+    127.0.1.1 edge-ldap-01
+
+  Install packages.
+    sudo apt update &&
+    sudo apt install -y slapd ldap-utils
+
+    sudo dpkg-reconfigure slapd
+      Password for the administrator    : Keychain: "edge-ldap-01-admin-user"
+      Omit LDAP configuration           : No
+      DNS domain name                   : homelab
+      Name of the organization          : homelab
+      Admin password                    : Keychain: "edge-ldap-01-admin-user"
+      Delete database if slap is purged : Yes
+      Move old database                 : Yes
+
+03 - Set the permissions
+    sudo mkdir /var/log/slapd/ &&
+    sudo touch /var/log/slapd/slapd-audit.log &&
+    sudo chown -R openldap:openldap /var/log/slapd
+
+    sudo cp ldap/server/slapd/usr.sbin.slapd /etc/apparmor.d/usr.sbin.slapd &&
+    sudo chown root:root /etc/apparmor.d/usr.sbin.slapd &&
+    sudo apparmor_parser -r -T /etc/apparmor.d/usr.sbin.slapd &&
+    sudo /etc/init.d/apparmor restart
+
+04 - Setup LDAP Sudo Access
+  export SUDO_FORCE_REMOVE=yes
+  sudo -E bash -c 'apt install -y sudo-ldap'
+
+  Copy Sudo Schema
+  sudo cp /usr/share/doc/sudo-ldap/schema.olcSudo /etc/ldap/schema/
+
+05 - Add the overlayes
+  Check if an overlay is loaded with:
+    sudo slapcat -n 0 | grep olcModuleLoad
+
+  Check if an overlay is enabled with:
+    sudo slapcat -n 0 | grep olcOverlay
+
+  sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/dyngroup.ldif &&
+  sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/schema.olcSudo &&
+  sudo ldapadd -Y EXTERNAL -H ldapi:/// -f ldap/server/module/01-overlay.ldif &&
+  sudo ldapadd -Y EXTERNAL -H ldapi:/// -f ldap/server/module/02-logging.ldif
+  sudo ldapadd -Y EXTERNAL -H ldapi:/// -f ldap/server/module/03-disallow-anonymous-bind.ldif
+
+06 - Disable IPV6
+  sudo nano /etc/default/slapd
+  SLAPD_SERVICES="ldap:/// ldaps:/// ldapi:///"
+  SLAPD_OPTIONS="-4"
+  sudo systemctl restart slapd
+
+07 - Configure Audit Logging File Rotation
+  sudo cp ldap/server/slapd/slapd-audit /etc/logrotate.d/slapd-audit &&
+  sudo chown root:root /etc/logrotate.d/slapd-audit
+
+08 - Configure OpenLDAP with SSL/TLS
+  sudo cp ~/ldap/server/ssl/{*.crt,*.key} /etc/ldap/sasl2/
+
+  Set ownership of the certificates to openldap user.
+  sudo chown -R openldap. /etc/ldap/sasl2
+
+  Apply configuration using the following command.
+  sudo slapcat -b "cn=config" | grep olcTLS
+  sudo ldapadd -Y EXTERNAL -H ldapi:/// -f ldap/server/module/04-tls.ldif
+
+  Test if all the config is correct.
+  sudo /usr/sbin/slapd -Tt
+
+  Restart LDAP server:
+  sudo systemctl restart slapd
+
+09 - Add the data (backup)
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/01-organizationalUnit.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/02-policies.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/03-organizationalRole.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/04-posixGroup.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/05-sudoRole.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/06-domain-admin.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/07-network.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/08-ldap.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/09-postgresql.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/10-zabbix.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/11-grafana.ldif
+
+10 - Allow port 389 and 636 on the UFW.
+  sudo ufw allow proto tcp from any to any port ldap comment "OpenLDAP" &&
+  sudo ufw allow proto tcp from any to any port ldaps comment "OpenLDAP"
+
+11 - Change the initial password for all the users.
+  # List all users.
+  ldapsearch -x -D cn=admin,dc=homelab -W -b "dc=homelab" "(|(objectclass=organizationalRole)(objectclass=organizationalPerson))" dn | awk -F": " '$1~/^\s*dn/{print $2}' > users.txt
+
+  password=$(openssl rand -base64 30 | colrm 30 | tr -dc 'a-zA-Z0-9')
+  ./change-password.sh users.txt $password
+
+12 - Test if the data was inserted.
+  ldapsearch -x -D cn=admin,dc=homelab -W -b "dc=homelab"
+  ldapsearch -x -D cn=admin,dc=homelab -W -H ldap://edge-ldap-01.homelab -b "dc=homelab"
+  ldapsearch -H ldapi:/// -Y EXTERNAL -LLL -b "dc=homelab"
+
+  ldapsearch -x -D cn=ldap-reader-firewall,dc=homelab -W -b "dc=homelab"
+  ldapsearch -x -D cn=lsampaio-grafana-manager,ou=people,dc=homelab -W -b "dc=homelab"

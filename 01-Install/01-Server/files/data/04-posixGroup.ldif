@@ -1,0 +1,11 @@
+dn: cn=users,ou=groups,dc=homelab
+cn: users
+description: users
+gidnumber: 10000
+objectclass: posixGroup
+
+dn: cn=services,ou=groups,dc=homelab
+cn: services
+description: services
+gidnumber: 10001
+objectclass: posixGroup
