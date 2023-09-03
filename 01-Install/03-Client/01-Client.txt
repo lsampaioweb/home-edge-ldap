@@ -33,6 +33,9 @@
   sudo chmod 600 -R /etc/sssd &&
   sudo chown -R root: /etc/sssd
 
+  sudo touch /var/log/sssd/sssd_sudo.log &&
+  sudo chmod 600 /var/log/sssd/sssd_sudo.log
+
   Check if everything is correct:
   sudo sssctl config-check
 
