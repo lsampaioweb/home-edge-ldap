@@ -1,0 +1,60 @@
+01 - Hide Apache Version and Operating System
+  sudo nano /etc/apache2/conf-enabled/security.conf
+    ServerTokens Prod
+    ServerSignature Off 
+
+  sudo systemctl reload apache2
+
+02 - Disable TRACE HTTP Request
+  sudo nano /etc/apache2/conf-enabled/security.conf
+    TraceEnable off
+
+  sudo systemctl reload apache2
+
+03 - Reduce the timeout
+  sudo nano /etc/apache2/apache2.conf
+    Timeout 60
+
+  sudo systemctl reload apache2
+
+04 - Disable Directory Listing and FollowSymLinks
+  sudo nano /etc/apache2/apache2.conf
+
+  Add “-” before each tag directive in the line:
+    Options Indexes FollowSymLinks
+  To become:
+    Options -Indexes -FollowSymLinks
+
+  sudo systemctl reload apache2
+
+05 - Disable .htaccess files
+  sudo nano /etc/apache2/apache2.conf
+    AllowOverride None
+
+  sudo systemctl reload apache2
+
+06 - Preventing DoS attacks
+  sudo nano /etc/apache2/apache2.conf
+    RequestReadTimeout header=10-20,MinRate=500 body=20,MinRate=500
+
+  sudo systemctl reload apache2
+  Link: https://httpd.apache.org/docs/2.4/mod/mod_reqtimeout.html
+
+07 - Secure Apache using mod_security and mod_evasive Modules
+  Mod_security
+  Acts as a firewall for web servers and applications, providing protection against brute force attacks.
+
+  sudo apt install libapache2-mod-security2 -y
+  sudo systemctl restart apache2
+
+  Mod_evasive
+  Detects and provides protection against DDOS and HTTP brute force attacks. It detects attacks whenever: so many requests are directed to a page several times per second; temporarily blacklisted IP still tries to make a new request; child process attempts making more than 50 concurrent requests.
+
+  sudo apt install libapache2-mod-evasive -y
+  sudo systemctl restart apache2
+
+08 - Limit Request Size
+  By default, the HTTP request in Apache is unlimited hence web server is susceptible to DoS attacks by keeping it open for a high number of request. 
+  <Directory "/var/www/">
+    LimitRequestBody 10485760
+  </Directory>
