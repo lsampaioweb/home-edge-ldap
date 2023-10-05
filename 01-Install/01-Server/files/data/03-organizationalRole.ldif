@@ -1,32 +1,32 @@
-dn: cn=ldap-reader-firewall,dc=homelab
+dn: cn=ldap-reader-firewall,ou=people,dc=homelab
 description: LDAP read only user used by edge-firewall
 objectclass: simpleSecurityObject
 objectclass: organizationalRole
 cn: ldap-reader-firewall
 userpassword: {SSHA}*
 
-dn: cn=ldap-reader-ldap,dc=homelab
+dn: cn=ldap-reader-ldap,ou=people,dc=homelab
 description: LDAP read only user used by edge-ldap
 objectclass: simpleSecurityObject
 objectclass: organizationalRole
 cn: ldap-reader-ldap
 userpassword: {SSHA}*
 
-dn: cn=ldap-reader-postgresql,dc=homelab
+dn: cn=ldap-reader-postgresql,ou=people,dc=homelab
 description: LDAP read only user used by edge-postgresql
 objectclass: simpleSecurityObject
 objectclass: organizationalRole
 cn: ldap-reader-postgresql
 userpassword: {SSHA}*
 
-dn: cn=ldap-reader-zabbix,dc=homelab
+dn: cn=ldap-reader-zabbix,ou=people,dc=homelab
 description: LDAP read only user used by edge-zabbix
 objectclass: simpleSecurityObject
 objectclass: organizationalRole
 cn: ldap-reader-zabbix
 userpassword: {SSHA}*
 
-dn: cn=ldap-reader-grafana,dc=homelab
+dn: cn=ldap-reader-grafana,ou=people,dc=homelab
 description: LDAP read only user used by edge-grafana
 objectclass: simpleSecurityObject
 objectclass: organizationalRole
