@@ -118,3 +118,4 @@
 
   ldapsearch -x -D "cn=ldap-reader-firewall,dc=homelab" -W -b "dc=homelab"
   ldapsearch -x -D "cn=lsampaio-postgresql-team,ou=people,dc=homelab" -W -b "dc=homelab"
+  ldapsearch -x -D "cn=ldap-reader-minio,ou=people,dc=homelab" -W -b "dc=homelab"

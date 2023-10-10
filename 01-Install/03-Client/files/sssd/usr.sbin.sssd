@@ -26,9 +26,9 @@
   /etc/libnl-3/classid r,
   /etc/localtime r,
   /etc/shells r,
+  /etc/sssd/sssd.conf r,
   /etc/sssd/conf.d/ r,
   /etc/sssd/conf.d/** r,
-  /etc/sssd/sssd.conf r,
   /etc/gss/mech.d/ r,
   /etc/gss/mech.d/** r,
   /usr/share/sssd/cfg_rules.ini r,
@@ -36,8 +36,8 @@
   /usr/lib/@{multiarch}/ldb/modules/ldb/* m,
   /usr/lib/@{multiarch}/samba/ldb/* m,
   /usr/lib/@{multiarch}/sssd/* rix,
-  /usr/libexec/sssd/* mrix,
-  /usr/sbin/sssd mrix,
+  /usr/libexec/sssd/* rmix,
+  /usr/sbin/sssd rmix,
 
   /tmp/{,.}krb5cc_* rwk,
 
@@ -61,5 +61,5 @@
   owner /var/lib/sss/mc/* rwk,
 
   # Site-specific additions and overrides. See local/README for details.
-  #include <local/usr.sbin.sssd>  
+  #include <local/usr.sbin.sssd>
 }

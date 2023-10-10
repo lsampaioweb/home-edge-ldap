@@ -32,3 +32,10 @@ objectclass: simpleSecurityObject
 objectclass: organizationalRole
 cn: ldap-reader-grafana
 userpassword: {SSHA}*
+
+dn: cn=ldap-reader-minio,ou=people,dc=homelab
+description: LDAP read only user used by edge-minio
+objectclass: simpleSecurityObject
+objectclass: organizationalRole
+cn: ldap-reader-minio
+userpassword: {SSHA}*

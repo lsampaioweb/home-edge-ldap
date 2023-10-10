@@ -4,6 +4,7 @@
   rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-postgresql-01.homelab:~/ldap/client/ &&
   rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-zabbix-01.homelab:~/ldap/client/ &&
   rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-grafana-01.homelab:~/ldap/client/
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-minio-01.homelab:~/ldap/client/
 
 02 - Install SSSD
   sudo apt install -y sssd libpam-sss libnss-sss libsss-sudo sssd-ldap sssd-tools ldap-utils
