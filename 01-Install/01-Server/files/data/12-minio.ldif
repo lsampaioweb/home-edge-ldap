@@ -1,0 +1,74 @@
+dn: cn=lsampaio-minio-team,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10012
+cn: lsampaio-minio-team
+uid: lsampaio-minio-team
+givenname: Luciano
+sn: Sampaio Minio Team
+displayname: Luciano Sampaio Minio Team
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-minio-team
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=lsampaio-minio-manager,ou=people,dc=homelab
+gidnumber: 10000
+uidnumber: 10013
+cn: lsampaio-minio-manager
+uid: lsampaio-minio-manager
+givenname: Luciano
+sn: Sampaio Minio Manager
+displayname: Luciano Sampaio Minio Manager
+mail: lsampaioweb@gmail.com
+homedirectory: /home/lsampaio-minio-manager
+loginshell: /bin/bash
+objectclass: posixAccount
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+userpassword: {SSHA}*
+
+dn: cn=minio-team,ou=groups,dc=homelab
+cn: minio-team
+description: Minio Team
+objectclass: groupOfNames
+member: cn=lsampaio-minio-team,ou=people,dc=homelab
+
+dn: cn=minio-manager,ou=groups,dc=homelab
+cn: minio-manager
+description: Minio Manager
+objectclass: groupOfNames
+member: cn=lsampaio-minio-manager,ou=people,dc=homelab
+
+dn: cn=minio-logins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: minio-logins
+description: Users that can login in the Minio server
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=server-manager,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=minio-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=minio-manager,ou=groups,dc=homelab)
+
+dn: cn=minio-admins,ou=groups,dc=homelab
+objectClass: groupOfURLs
+cn: minio-admins
+description: Users that are Minio Application Administrators
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=minio-team,ou=groups,dc=homelab)
+memberURL: ldap:///ou=people,dc=homelab??sub?(memberof=cn=minio-manager,ou=groups,dc=homelab)
+
+dn: cn=minio-admins,ou=sudoers,dc=homelab
+objectClass: sudoRole
+objectClass: top
+cn: minio-admins
+description: Users that can become root
+sudoHost: edge-minio-01
+sudoCommand: ALL
+sudoRunAsUser: ALL
+sudoRunAsGroup: ALL
+sudoUser: lsampaio-minio-team
+sudoUser: lsampaio-minio-manager
+sudoOrder: 8

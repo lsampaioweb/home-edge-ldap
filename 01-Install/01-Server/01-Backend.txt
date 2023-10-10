@@ -92,7 +92,8 @@
   sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/08-ldap.ldif &&
   sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/09-postgresql.ldif &&
   sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/10-zabbix.ldif &&
-  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/11-grafana.ldif
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/11-grafana.ldif &&
+  sudo ldapadd -x -D cn=admin,dc=homelab -W -f ldap/server/data/12-minio.ldif
 
 10 - Allow port 389 and 636 on the UFW.
   sudo ufw allow proto tcp from any to any port ldap comment "OpenLDAP" &&
@@ -108,7 +109,7 @@
   password=$(openssl rand -base64 30 | colrm 30 | tr -dc 'a-zA-Z0-9')
   ./change-password.sh readers.txt $password
   ./change-password.sh users.txt $password
-  
+
 12 - Test if the data was inserted.
   ldapsearch -x -D "cn=admin,dc=homelab" -W
   ldapsearch -x -D "cn=admin,dc=homelab" -W -b "dc=homelab"
