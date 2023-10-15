@@ -3,8 +3,9 @@
   rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-ldap-01.homelab:~/ldap/client/ &&
   rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-postgresql-01.homelab:~/ldap/client/ &&
   rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-zabbix-01.homelab:~/ldap/client/ &&
-  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-grafana-01.homelab:~/ldap/client/
-  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-minio-01.homelab:~/ldap/client/
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-grafana-01.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-minio-01.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-minio-02.homelab:~/ldap/client/
 
 02 - Install SSSD
   sudo apt install -y sssd libpam-sss libnss-sss libsss-sudo sssd-ldap sssd-tools ldap-utils
@@ -28,12 +29,14 @@
     sudo cp ldap/client/config/ldap.conf /etc/ldap/ldap.conf
 
 05 - Set Proper Permissions and Ownership on SSSD configurations
+  # Add the specific config for this VM.
+    sudo nano ldap/client/sssd/sssd.conf
+
   sudo cp ldap/client/sssd/sssd.conf /etc/sssd/sssd.conf &&
   sudo rm /usr/lib/x86_64-linux-gnu/sssd/conf/sssd.conf &&
   sudo ln -s /etc/sssd/sssd.conf /usr/lib/x86_64-linux-gnu/sssd/conf/sssd.conf &&
   sudo chmod 600 -R /etc/sssd &&
-  sudo chown -R root: /etc/sssd
-
+  sudo chown -R root: /etc/sssd &&
   sudo touch /var/log/sssd/sssd_sudo.log &&
   sudo chmod 600 /var/log/sssd/sssd_sudo.log
 
