@@ -66,6 +66,7 @@ objectClass: top
 cn: minio-admins
 description: Users that can become root
 sudoHost: edge-minio-01
+sudoHost: edge-minio-02
 sudoCommand: ALL
 sudoRunAsUser: ALL
 sudoRunAsGroup: ALL
