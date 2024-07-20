@@ -1,11 +1,11 @@
 01 - Copy all the necessary files to the server.
   mkdir -p ~/ldap/client/
-  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-ldap-01.homelab:~/ldap/client/ &&
-  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-postgresql-01.homelab:~/ldap/client/ &&
-  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-zabbix-01.homelab:~/ldap/client/ &&
-  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-grafana-01.homelab:~/ldap/client/ &&
-  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-minio-01.homelab:~/ldap/client/ &&
-  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-minio-02.homelab:~/ldap/client/
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-ldap-01.lan.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-postgresql-01.lan.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-zabbix-01.lan.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-grafana-01.lan.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-minio-01.lan.homelab:~/ldap/client/ &&
+  rsync -avh -e ssh 01-Install/03-Client/files/ lsampaio@edge-minio-02.lan.homelab:~/ldap/client/
 
 02 - Install SSSD
   sudo apt install -y sssd libpam-sss libnss-sss libsss-sudo sssd-ldap sssd-tools ldap-utils
@@ -23,7 +23,7 @@
 
 04 - Install OpenLDAP Server CA Certificate
   Verify the validity of the certificate:
-    openssl s_client -connect edge-ldap-01.homelab:636 -CAfile /usr/local/share/ca-certificates/certificate.authority.crt
+    openssl s_client -connect edge-ldap-01.lan.homelab:636 -CAfile /usr/local/share/ca-certificates/certificate.authority.crt
 
   Configure LDAP client to ensure connection between client and server is encrypted.
     sudo cp ldap/client/config/ldap.conf /etc/ldap/ldap.conf

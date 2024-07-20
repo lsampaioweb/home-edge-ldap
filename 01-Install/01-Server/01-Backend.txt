@@ -1,13 +1,13 @@
 01 - Copy all the necessary files to the server.
   mkdir -p ~/ldap/server/
-  rsync -avh -e ssh 01-Install/01-Server/files/ lsampaio@edge-ldap-01.homelab:~/ldap/server/ &&
-  rsync -avh -e ssh /opt/certificates/certificate.authority/certificate.authority.crt lsampaio@edge-ldap-01.homelab:~/ldap/server/ssl/ &&
-  rsync -avh -e ssh /opt/certificates/edge-ldap-01.homelab/{*.crt,*.key} lsampaio@edge-ldap-01.homelab:~/ldap/server/ssl/
+  rsync -avh -e ssh 01-Install/01-Server/files/ lsampaio@edge-ldap-01.lan.homelab:~/ldap/server/ &&
+  rsync -avh -e ssh /opt/certificates/certificate.authority/certificate.authority.crt lsampaio@edge-ldap-01.lan.homelab:~/ldap/server/ssl/ &&
+  rsync -avh -e ssh /opt/certificates/edge-ldap-01.lan.homelab/{*.crt,*.key} lsampaio@edge-ldap-01.lan.homelab:~/ldap/server/ssl/
 
 02 - Install OpenLDAP on Ubuntu 22.04.
   Change hostname.
     * It is important to set the domain name.
-    sudo hostnamectl set-hostname edge-ldap-01.homelab
+    sudo hostnamectl set-hostname edge-ldap-01.lan.homelab
 
     sudo nano /etc/hosts
     127.0.1.1 edge-ldap-01
@@ -113,7 +113,7 @@
 12 - Test if the data was inserted.
   ldapsearch -x -D "cn=admin,dc=homelab" -W
   ldapsearch -x -D "cn=admin,dc=homelab" -W -b "dc=homelab"
-  ldapsearch -x -D "cn=admin,dc=homelab" -W -H ldap://edge-ldap-01.homelab -b "dc=homelab"
+  ldapsearch -x -D "cn=admin,dc=homelab" -W -H ldap://edge-ldap-01.lan.homelab -b "dc=homelab"
   ldapsearch -H ldapi:/// -Y EXTERNAL -LLL -b "dc=homelab"
 
   ldapsearch -x -D "cn=ldap-reader-firewall,dc=homelab" -W -b "dc=homelab"

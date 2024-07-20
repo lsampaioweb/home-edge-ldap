@@ -1,6 +1,6 @@
-01 - Copy all the necessary files to the server.  
+01 - Copy all the necessary files to the server.
   mkdir -p ~/ldap/server-web/
-  rsync -avh -e ssh 01-Install/02-Server-Web/files/ lsampaio@edge-ldap-01.homelab:~/ldap/server-web/
+  rsync -avh -e ssh 01-Install/02-Server-Web/files/ lsampaio@edge-ldap-01.lan.homelab:~/ldap/server-web/
 
 02 - Install Apache Web server & PHP
   Install packages.
@@ -53,4 +53,4 @@
 
   sudo systemctl restart apache2
 
-Access phpLDAPadmin: https://edge-ldap-01.homelab
+Access phpLDAPadmin: https://edge-ldap-01.lan.homelab
