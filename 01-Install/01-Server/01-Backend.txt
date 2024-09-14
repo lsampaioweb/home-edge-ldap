@@ -1,7 +1,7 @@
 01 - Copy all the necessary files to the server.
   mkdir -p ~/ldap/server/
   rsync -avh -e ssh 01-Install/01-Server/files/ lsampaio@edge-ldap-01.lan.homelab:~/ldap/server/ &&
-  rsync -avh -e ssh /opt/certificates/certificate.authority/certificate.authority.crt lsampaio@edge-ldap-01.lan.homelab:~/ldap/server/ssl/ &&
+  rsync -avh -e ssh /opt/certificates/ca.lan.homelab/ca.lan.homelab.crt lsampaio@edge-ldap-01.lan.homelab:~/ldap/server/ssl/ &&
   rsync -avh -e ssh /opt/certificates/edge-ldap-01.lan.homelab/{*.crt,*.key} lsampaio@edge-ldap-01.lan.homelab:~/ldap/server/ssl/
 
 02 - Install OpenLDAP on Ubuntu 22.04.

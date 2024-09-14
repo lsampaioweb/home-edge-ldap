@@ -23,7 +23,7 @@
 
 04 - Install OpenLDAP Server CA Certificate
   Verify the validity of the certificate:
-    openssl s_client -connect edge-ldap-01.lan.homelab:636 -CAfile /usr/local/share/ca-certificates/certificate.authority.crt
+    openssl s_client -connect edge-ldap-01.lan.homelab:636 -CAfile /usr/local/share/ca-certificates/ca.lan.homelab.crt
 
   Configure LDAP client to ensure connection between client and server is encrypted.
     sudo cp ldap/client/config/ldap.conf /etc/ldap/ldap.conf
